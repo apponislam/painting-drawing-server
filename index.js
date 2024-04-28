@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = "mongodb+srv://apponarts:hNPA6dOz7vr5Q3Ju@cluster0.4bvpsnf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -25,12 +25,29 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const allArt = client.db("AllArtDB").collection("Arts");
 
         app.get("/allart", async (req, res) => {
             const cursor = allArt.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        app.get("/allart/:id", async (req, res) => {
+            const id = req.params.id;
+            const result = await allArt.findOne({ _id: new ObjectId(id) });
+            if (!result) {
+                return res.send("Document not found");
+            }
+            res.send(result);
+        });
+
+        app.get("/allart/email/:email", async (req, res) => {
+            const { email } = req.params;
+            const query = { useremail: email };
+            const cursor = allArt.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
