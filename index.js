@@ -59,6 +59,30 @@ async function run() {
             res.send(result);
         });
 
+        app.put("/allart/:id", async (req, res) => {
+            const id = req.params.id;
+            const updateDetails = req.body;
+            console.log(id, updateDetails);
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            // const artItem = { image, item_name, subcategory_Name, short_description, price, rating, customization, processing_time, stockStatus };
+            const updatedArt = {
+                $set: {
+                    image: updateDetails.image,
+                    item_name: updateDetails.item_name,
+                    subcategory_Name: updateDetails.subcategory_Name,
+                    short_description: updateDetails.short_description,
+                    price: updateDetails.price,
+                    rating: updateDetails.rating,
+                    customization: updateDetails.customization,
+                    processing_time: updateDetails.processing_time,
+                    stockStatus: updateDetails.stockStatus,
+                },
+            };
+            const result = await allArt.updateOne(filter, updatedArt, options);
+            res.send(result);
+        });
+
         app.delete("/allart/:id", async (req, res) => {
             const id = req.params.id;
             console.log(id);
