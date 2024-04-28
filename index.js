@@ -52,6 +52,14 @@ async function run() {
             res.send(result);
         });
 
+        app.get("/allart/subid/:sub", async (req, res) => {
+            const { sub } = req.params;
+            const query = { subcategory_Name: sub };
+            const cursor = allArt.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
         app.post("/allart", async (req, res) => {
             const allarts = req.body;
             console.log(allarts);
