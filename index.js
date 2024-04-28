@@ -73,7 +73,6 @@ async function run() {
             console.log(id, updateDetails);
             const filter = { _id: new ObjectId(id) };
             const options = { upsert: true };
-            // const artItem = { image, item_name, subcategory_Name, short_description, price, rating, customization, processing_time, stockStatus };
             const updatedArt = {
                 $set: {
                     image: updateDetails.image,
